@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/deepak/Desktop/Desktop/udemy_project/hotel_management/mlruns/0/80ffae8177dd4491be595e486f63f6ec/artifacts
+end_time: 1743432432468
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 80ffae8177dd4491be595e486f63f6ec
+run_name: melodic-conch-625
+run_uuid: 80ffae8177dd4491be595e486f63f6ec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743432393429
+status: 3
+tags: []
+user_id: dipak

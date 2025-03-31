@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/deepak/Desktop/Desktop/udemy_project/hotel_management/mlruns/0/9402e4ebc9834ad68608c2739a8e4864/artifacts
+end_time: 1743433122328
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9402e4ebc9834ad68608c2739a8e4864
+run_name: charming-auk-454
+run_uuid: 9402e4ebc9834ad68608c2739a8e4864
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743433055449
+status: 3
+tags: []
+user_id: dipak

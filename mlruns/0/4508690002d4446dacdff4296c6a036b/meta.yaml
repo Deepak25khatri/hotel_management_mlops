@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/deepak/Desktop/Desktop/udemy_project/hotel_management/mlruns/0/4508690002d4446dacdff4296c6a036b/artifacts
+end_time: 1743432613459
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4508690002d4446dacdff4296c6a036b
+run_name: clumsy-horse-15
+run_uuid: 4508690002d4446dacdff4296c6a036b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743432565515
+status: 3
+tags: []
+user_id: dipak
