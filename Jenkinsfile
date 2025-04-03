@@ -7,14 +7,18 @@ pipeline {
   }
   
   stages {
-   
-
     stage('Cloning the GitHub Repo') {
       steps {
         script {
           echo 'Cloning the GitHub repo...'
-          checkout scmGit(branches: [[name: '*/main']], extensions: [], 
-            userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/Deepak25khatri/hotel_management_mlops.git']])
+          checkout scmGit(
+            branches: [[name: '*/main']], 
+            extensions: [], 
+            userRemoteConfigs: [[
+              credentialsId: 'github-token', 
+              url: 'https://github.com/Deepak25khatri/hotel_management_mlops.git'
+            ]]
+          )
         }
       }
     }
@@ -23,31 +27,32 @@ pipeline {
       steps {
         script {
           echo 'Setting up virtual environment and installing dependencies...'
-          sh '''
-          python3 -m venv ${VENV_DIR} || python -m venv ${VENV_DIR}
-          . /tmp/venv/bin/activate
-          pip install --upgrade pip
-          pip install -e .
-          '''
+          sh """
+            python3 -m venv ${VENV_DIR} || python -m venv ${VENV_DIR}
+            . ${VENV_DIR}/bin/activate
+            pip install --upgrade pip
+            pip install -e .
+            deactivate
+          """
         }
       }
     }
+
     stage('Building and Pushing Docker Image to GCR') {
-    steps {
+      steps {
         script {
-            echo "Building and Pushing Docker Image to GCR............."
-            sh 'rm -rf venv'
-            withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                sh '''
-                gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-                gcloud config set project your-project-id
-                gcloud auth configure-docker --quiet
-                docker build --build-arg GCP_KEY=${GOOGLE_APPLICATION_CREDENTIALS} -t gcr.io/your-project/ml-project:latest .
-                docker push gcr.io/your-project/ml-project:latest
-                '''
-            }
+          echo "Building and Pushing Docker Image to GCR............."
+          withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+            sh """
+              gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+              gcloud config set project ${GCP_PROJECT}
+              gcloud auth configure-docker --quiet
+              docker build --build-arg GCP_KEY=${GOOGLE_APPLICATION_CREDENTIALS} -t gcr.io/${GCP_PROJECT}/ml-project:latest .
+              docker push gcr.io/${GCP_PROJECT}/ml-project:latest
+            """
+          }
         }
+      }
     }
-}
   }
 }
