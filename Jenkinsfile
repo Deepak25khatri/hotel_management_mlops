@@ -35,7 +35,7 @@ pipeline {
           echo 'Setting up virtual environment and installing dependencies...'
           sh '''
           python3 -m venv ${VENV_DIR} || python -m venv ${VENV_DIR}
-          source ${VENV_DIR}/bin/activate
+          . /tmp/venv/bin/activate
           pip install --upgrade pip
           pip install -e .
           '''
