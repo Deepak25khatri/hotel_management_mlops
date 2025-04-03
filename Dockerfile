@@ -1,30 +1,26 @@
-# Use a lightweight Python image
 FROM python:slim
 
-# Set environment variables to prevent Python from writing .pyc files & Ensure Python output is not buffered
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git \
+    wget \
+    libgomp1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
+# Install gcloud SDK
+RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-462.0.1-linux-x86_64.tar.gz && \
+    tar -xf google-cloud-cli-*.tar.gz && \
+    ./google-cloud-sdk/install.sh --quiet && \
+    rm google-cloud-cli-*.tar.gz
+ENV PATH="/google-cloud-sdk/bin:${PATH}"
+
 WORKDIR /app
-
-# Install system dependencies required by LightGBM
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgomp1 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy the application code
 COPY . .
 
-# Install the package in editable mode
+# Install Python dependencies
 RUN pip install --no-cache-dir -e .
 
-# Train the model before running the application
-RUN python pipeline/training_pipeline.py
-
-# Expose the port that Flask will run on
-EXPOSE 5000
-
-# Command to run the app
-CMD ["python", "application.py"]
+# Set entrypoint
+CMD ["python", "pipeline/training_pipeline.py"]

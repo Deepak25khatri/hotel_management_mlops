@@ -32,31 +32,22 @@ pipeline {
         }
       }
     }
-    stage('Building and Pushing Docker Image to GCR'){
-            steps{
-              
-                withCredentials([file(credentialsId: 'gcp-key' , variable : 'GOOGLE_APPLICATION_CREDENTIALS')]){
-                    script{
-                      sh 'rm -rf venv'
-                        echo 'Building and Pushing Docker Image to GCR.............'
-                        sh '''
-                        export PATH=$PATH:${GCLOUD_PATH}
-
-
-                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-
-                        gcloud config set project ${GCP_PROJECT}
-
-                        gcloud auth configure-docker --quiet
-
-                        docker build -t gcr.io/${GCP_PROJECT}/ml-project:latest .
-
-                        docker push gcr.io/${GCP_PROJECT}/ml-project:latest 
-
-                        '''
-                    }
-                }
+    stage('Building and Pushing Docker Image to GCR') {
+    steps {
+        script {
+            echo "Building and Pushing Docker Image to GCR............."
+            sh 'rm -rf venv'
+            withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                sh '''
+                gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                gcloud config set project your-project-id
+                gcloud auth configure-docker --quiet
+                docker build --build-arg GCP_KEY=${GOOGLE_APPLICATION_CREDENTIALS} -t gcr.io/your-project/ml-project:latest .
+                docker push gcr.io/your-project/ml-project:latest
+                '''
             }
         }
+    }
+}
   }
 }
