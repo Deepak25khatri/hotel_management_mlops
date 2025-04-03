@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    VENV_DIR = 'venv'
+    VENV_DIR = '/tmp/venv'
   }
   
   stages {
