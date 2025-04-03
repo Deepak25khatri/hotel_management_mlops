@@ -3,6 +3,9 @@ pipeline{
   environment{
     VENV_DIR = 'venv'
   }
+  python3 --version
+  python --version
+
   stages{
     stage('cloning the github repo to jenkins'){
       steps{
